@@ -8004,3 +8004,4 @@ Raging Bolt	NNP
 Cap de Formentor	NNP
 Iron Boulder	NNP
 Iron Crown	NNP
+Energy Saver	NNP

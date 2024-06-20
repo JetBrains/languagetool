@@ -10847,7 +10847,7 @@ Incorrectly touched. <example type="untouched">Incorrect grammar. Those present 
               <token regexp="yes">if|at|for</token>
             </pattern>
             <disambig postag="RB"/>
-            <example type="ambiguous" inputform="Even[even/JJ,even/NN,even/RB,even/VB,even/VBP]" outputform="Even[even/RB]"><marker>Even</marker> if you're right, we need to do this.</example>
+            <example type="ambiguous" inputform="Even[Even/NNP,even/JJ,even/NN,even/RB,even/VB,even/VBP]" outputform="Even[even/RB]"><marker>Even</marker> if you're right, we need to do this.</example>
             <example type="untouched">It <marker>even</marker> made an appearance at the Woodstock Music Festival.</example>
           </rule>
         </rulegroup>

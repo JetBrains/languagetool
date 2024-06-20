@@ -8012,3 +8012,4 @@ tam-o'-shanters	NNS
 tam o'-shanter	NN
 tam o'-shanters	NNS
 Tam o' Shanter	NNP
+Ten Thousands Lakes	NNP

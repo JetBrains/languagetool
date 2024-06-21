@@ -8013,3 +8013,13 @@ tam o'-shanter	NN
 tam o'-shanters	NNS
 Tam o' Shanter	NNP
 Ten Thousands Lakes	NNP
+status quo	NN
+Status Quo	NN
+status quos	NNS
+Status Quos	NNS
+status quo ante	NN
+Status Quo	 Ante	NN
+status quo ante bellum	NN
+Status Quo	 Ante Bellum	NN
+in situ	RB
+in situ	JJ

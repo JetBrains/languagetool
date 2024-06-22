@@ -8018,8 +8018,11 @@ Status Quo	NN
 status quos	NNS
 Status Quos	NNS
 status quo ante	NN
-Status Quo	 Ante	NN
+Status Quo Ante	NN
 status quo ante bellum	NN
-Status Quo	 Ante Bellum	NN
+Status Quo Ante Bellum	NN
 in situ	RB
 in situ	JJ
+hic et nunc	RB
+ac etiam	RB
+ceteris paribus	RB

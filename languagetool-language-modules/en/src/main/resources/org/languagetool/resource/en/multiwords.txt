@@ -8026,3 +8026,12 @@ in situ	JJ
 hic et nunc	RB
 ac etiam	RB
 ceteris paribus	RB
+ib.	RB
+ibid.	RB
+a.k.a.	RB
+chef d'oeuvre	NN
+chefs d'oeuvre	NNS
+chef-d'oeuvre	NN
+chefs-d'oeuvre	NNS
+chef-d'œuvre	NN
+chefs-d'œuvre	NNS

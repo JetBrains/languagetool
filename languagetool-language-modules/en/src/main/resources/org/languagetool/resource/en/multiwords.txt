@@ -8035,3 +8035,4 @@ chef-d'oeuvre	NN
 chefs-d'oeuvre	NNS
 chef-d'œuvre	NN
 chefs-d'œuvre	NNS
+de facto	RB

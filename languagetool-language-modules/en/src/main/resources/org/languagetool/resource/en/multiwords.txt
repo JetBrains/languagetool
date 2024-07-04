@@ -8037,3 +8037,5 @@ chef-d'œuvre	NN
 chefs-d'œuvre	NNS
 de facto	RB
 Genghis Khan	NNP
+'Ndrangheta	NNP
+’Ndrangheta	NNP

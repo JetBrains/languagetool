@@ -8041,3 +8041,6 @@ Genghis Khan	NNP
 ’Ndrangheta	NNP
 Viet Cong	NNP
 Kublai Khan	NNP
+double Dutch	NN:U
+hacky sack	NN
+hacky sacks	NN

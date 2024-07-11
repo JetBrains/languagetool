@@ -8040,3 +8040,4 @@ Genghis Khan	NNP
 'Ndrangheta	NNP
 ’Ndrangheta	NNP
 Viet Cong	NNP
+Kublai Khan	NNP

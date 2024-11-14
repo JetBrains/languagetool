@@ -22,7 +22,6 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.tuple.Triple;
 import org.jetbrains.annotations.Nullable;
 import org.languagetool.Language;
-import org.languagetool.ResourceBundleTools;
 import org.languagetool.chunking.ChunkTag;
 import org.languagetool.rules.CorrectExample;
 import org.languagetool.rules.ErrorTriggeringExample;
@@ -684,8 +683,7 @@ public class XMLRuleHandler extends DefaultHandler {
         ((RegexPatternRule) rule).setRegexFilter(filter);
         rule.setFilterArguments(filterArgs);
       } else if (rule instanceof PatternRule || rule instanceof DisambiguationPatternRule) {
-        RuleFilterCreator creator = new RuleFilterCreator();
-        RuleFilter filter = creator.getFilter(filterClassName);
+        RuleFilter filter = RuleFilterCreator.getInstance().getFilter(filterClassName);
         rule.setFilter(filter);
         rule.setFilterArguments(filterArgs);
       } else {

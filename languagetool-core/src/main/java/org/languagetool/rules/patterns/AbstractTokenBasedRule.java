@@ -25,6 +25,8 @@ import org.languagetool.Language;
 
 import java.util.*;
 
+import static org.languagetool.tools.StringInterner.intern;
+
 /**
  * A base class for {@link PatternToken}-based rules.
  * It's public for implementation reasons and should not be used outside LanguageTool.
@@ -114,7 +116,7 @@ public abstract class AbstractTokenBasedRule extends AbstractPatternRule {
     private TokenHint(boolean inflected, Set<String> possibleValues, int tokenIndex) {
       this.inflected = inflected;
       this.tokenIndex = tokenIndex;
-      lowerCaseValues = possibleValues.stream().map(String::toLowerCase).distinct().toArray(String[]::new);
+      lowerCaseValues = possibleValues.stream().map(s -> intern(s.toLowerCase())).distinct().toArray(String[]::new);
     }
 
     @Override

@@ -23,6 +23,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
+import static org.languagetool.tools.StringInterner.intern;
+
 public final class SynthesizerTools {
   
   private SynthesizerTools() {
@@ -37,7 +39,7 @@ public final class SynthesizerTools {
         if (line.isEmpty() || line.charAt(0) == '#') {  // ignore empty lines and comments
           continue;
         }
-        result.add(line);
+        result.add(intern(line));
       }
     }
     return result;

@@ -20,10 +20,7 @@ package org.languagetool.language;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.languagetool.Language;
-import org.languagetool.LanguageMaintainedState;
-import org.languagetool.LanguageWithModel;
-import org.languagetool.UserConfig;
+import org.languagetool.*;
 import org.languagetool.chunking.Chunker;
 import org.languagetool.chunking.RussianChunker;
 import org.languagetool.languagemodel.LanguageModel;
@@ -42,13 +39,27 @@ import org.languagetool.tokenizers.Tokenizer;
 import org.languagetool.tokenizers.ru.RussianWordTokenizer;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.regex.Pattern;
 
 public class Russian extends LanguageWithModel {
+  private static final String LANGUAGE_SHORT_CODE = "ru-RU";
+
+  private static volatile Throwable instantiationTrace;
+
+  public Russian() {
+    Throwable trace = instantiationTrace;
+    if (trace != null) {
+      throw new RuntimeException("Language was already instantiated, see the cause stacktrace below.", trace);
+    }
+    instantiationTrace = new Throwable();
+  }
+
+  /**
+   * This is a fake constructor overload for the subclasses. Public constructors can only be used by the LT itself.
+   */
+  protected Russian(boolean fakeValue) {
+  }
 
   @Override
   public Pattern getIgnoredCharactersRegex() {
@@ -220,5 +231,13 @@ public class Russian extends LanguageWithModel {
   @Override
   protected SpellingCheckRule createDefaultSpellingRule(ResourceBundle messages) throws IOException {
     return new MorfologikRussianSpellerRule(messages, this, null, null);
+  }
+
+  public static @NotNull Russian getInstance() {
+    Language language = Objects.requireNonNull(Languages.getLanguageForShortCode(LANGUAGE_SHORT_CODE));
+    if (language.getClass() == Russian.class) {
+      return (Russian) language;
+    }
+    throw new RuntimeException("Russian language expected, got " + language);
   }
 }

@@ -40,7 +40,7 @@ public class RussianHybridDisambiguator extends AbstractDisambiguator {
   public static final RussianHybridDisambiguator INSTANCE = new RussianHybridDisambiguator();
 
   private final Disambiguator chunker = MultiWordChunker.getInstance("/ru/multiwords.txt");
-  private final Disambiguator disambiguator = new XmlRuleDisambiguator(new Russian());
+  private final Disambiguator disambiguator = new XmlRuleDisambiguator(Russian.getInstance());
 
   @Override
   public final AnalyzedSentence disambiguate(AnalyzedSentence input) throws IOException {

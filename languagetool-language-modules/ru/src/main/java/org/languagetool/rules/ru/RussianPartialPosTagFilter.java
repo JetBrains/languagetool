@@ -39,8 +39,8 @@ import java.util.List;
  */
 public class RussianPartialPosTagFilter extends PartialPosTagFilter {
 
-  private final Tagger tagger = new Russian().getTagger();
-  private final Disambiguator disambiguator = new Russian().getDisambiguator();
+  private final Tagger tagger = Russian.getInstance().getTagger();
+  private final Disambiguator disambiguator = Russian.getInstance().getDisambiguator();
 
   @Override
   protected List<AnalyzedTokenReadings> tag(String token) {

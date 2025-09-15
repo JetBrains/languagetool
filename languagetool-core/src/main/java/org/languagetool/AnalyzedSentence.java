@@ -57,8 +57,8 @@ public final class AnalyzedSentence {
     this.whPositions = mapping;
     this.nonBlankTokens = getNonBlankReadings(tokens, whCounter, nonWhCounter, mapping).toArray(new AnalyzedTokenReadings[0]);
     this.nonBlankPreDisambigTokens = getNonBlankReadings(preDisambigTokens, whCounter, nonWhCounter, mapping).toArray(new AnalyzedTokenReadings[0]);
-    tokenOffsets = indexTokens(nonBlankTokens);
-    lemmaOffsets = indexLemmas(nonBlankTokens);
+    this.tokenOffsets = indexTokens(nonBlankTokens);
+    this.lemmaOffsets = indexLemmas(nonBlankTokens);
   }
 
   @NotNull
@@ -81,8 +81,8 @@ public final class AnalyzedSentence {
     this.whPositions = mapping;
     this.nonBlankTokens = nonBlankTokens;
     this.nonBlankPreDisambigTokens = nonBlankPreDisambigTokens;
-    tokenOffsets = indexTokens(nonBlankTokens);
-    lemmaOffsets = indexLemmas(nonBlankTokens);
+    this.tokenOffsets = indexTokens(nonBlankTokens);
+    this.lemmaOffsets = indexLemmas(nonBlankTokens);
   }
 
   private static Map<String, List<Integer>> indexTokens(AnalyzedTokenReadings[] tokens) {
@@ -377,5 +377,4 @@ public final class AnalyzedSentence {
     // tokenSet and lemmaSet are a subset of tokens and don't need to be included
     return Objects.hash(nonBlankTokens, tokens, whPositions);
   }
-
 }

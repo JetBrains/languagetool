@@ -26,6 +26,7 @@ import org.languagetool.language.French;
 import org.languagetool.tagging.disambiguation.AbstractDisambiguator;
 import org.languagetool.tagging.disambiguation.Disambiguator;
 import org.languagetool.tagging.disambiguation.MultiWordChunker;
+import org.languagetool.tagging.disambiguation.rules.CachingDisambiguator;
 import org.languagetool.tagging.disambiguation.rules.XmlRuleDisambiguator;
 
 import java.io.IOException;
@@ -39,7 +40,7 @@ import java.io.IOException;
 public class FrenchHybridDisambiguator extends AbstractDisambiguator {
 
   private final MultiWordChunker chunker = MultiWordChunker.getInstance("/fr/multiwords.txt", true, true, false);
-  private final Disambiguator disambiguator = new XmlRuleDisambiguator(French.getInstance(), true);
+  private final Disambiguator disambiguator = new CachingDisambiguator(new XmlRuleDisambiguator(French.getInstance(), true));
   private final MultiWordChunker chunkerGlobal = MultiWordChunker.getInstance("/spelling_global.txt", false, true, false,
     MultiWordChunker.tagForNotAddingTags);
 

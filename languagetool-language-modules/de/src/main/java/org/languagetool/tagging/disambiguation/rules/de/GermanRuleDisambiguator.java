@@ -26,6 +26,7 @@ import org.languagetool.Language;
 import org.languagetool.tagging.disambiguation.AbstractDisambiguator;
 import org.languagetool.tagging.disambiguation.Disambiguator;
 import org.languagetool.tagging.disambiguation.MultiWordChunker;
+import org.languagetool.tagging.disambiguation.rules.CachingDisambiguator;
 import org.languagetool.tagging.disambiguation.rules.XmlRuleDisambiguator;
 
 import java.io.IOException;
@@ -44,7 +45,7 @@ public class GermanRuleDisambiguator extends AbstractDisambiguator {
     "/spelling_global.txt", false, true, false, MultiWordChunker.tagForNotAddingTags);
 
   public GermanRuleDisambiguator(Language lang) {
-    disambiguator = new XmlRuleDisambiguator(lang, true);
+    disambiguator = new CachingDisambiguator(new XmlRuleDisambiguator(lang, true));
     //TODO: merge in one disambiguator:
     multitokenSpeller.setIgnoreSpelling(true);
     multitokenSpeller2.setIgnoreSpelling(true);

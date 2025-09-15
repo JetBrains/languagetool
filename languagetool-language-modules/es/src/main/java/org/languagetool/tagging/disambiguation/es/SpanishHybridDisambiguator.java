@@ -26,6 +26,7 @@ import org.languagetool.Language;
 import org.languagetool.tagging.disambiguation.AbstractDisambiguator;
 import org.languagetool.tagging.disambiguation.Disambiguator;
 import org.languagetool.tagging.disambiguation.MultiWordChunker;
+import org.languagetool.tagging.disambiguation.rules.CachingDisambiguator;
 import org.languagetool.tagging.disambiguation.rules.XmlRuleDisambiguator;
 
 import java.io.IOException;
@@ -42,7 +43,7 @@ public class SpanishHybridDisambiguator extends AbstractDisambiguator {
   private final Disambiguator disambiguator;
 
   public SpanishHybridDisambiguator(Language lang) {
-    disambiguator = new XmlRuleDisambiguator(lang, true);
+    disambiguator = new CachingDisambiguator(new XmlRuleDisambiguator(lang, true));
     chunker.setRemovePreviousTags(true);
   }
 

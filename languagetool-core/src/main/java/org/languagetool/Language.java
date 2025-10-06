@@ -90,16 +90,19 @@ public abstract class Language {
   private static final Pattern TYPOGRAPHY_PATTERN_4 = compile("([ \\(])\"");
   private static final Pattern TYPOGRAPHY_PATTERN_5 = compile("\"([\\u202f\\u00a0 !\\?,\\.;:\\)])");
 
+  private static final Object PATTERN_RULE_LOCK = new Object();
+  private static final Object DISAMBIGUATOR_LOCK = new Object();
+  private static final Object SENTENCE_TOKENIZER_LOCK = new Object();
+
   private final UnifierConfiguration unifierConfig = new UnifierConfiguration();
   private final UnifierConfiguration disambiguationUnifierConfig = new UnifierConfiguration();
 
   private final Pattern ignoredCharactersRegex = compile("[\u00AD]");  // soft hyphen
-  
-  private List<AbstractPatternRule> patternRules;
 
-  private Disambiguator disambiguator;
+  private volatile List<AbstractPatternRule> patternRules;
+  private volatile Disambiguator disambiguator;
   private Tagger tagger;
-  private SentenceTokenizer sentenceTokenizer;
+  private volatile SentenceTokenizer sentenceTokenizer;
   private Tokenizer wordTokenizer;
   private Chunker chunker;
   private Chunker postDisambiguationChunker;
@@ -395,9 +398,13 @@ public abstract class Language {
   /**
    * Get this language's part-of-speech disambiguator implementation.
    */
-  public synchronized Disambiguator getDisambiguator() {
+  public Disambiguator getDisambiguator() {
     if (disambiguator == null) {
-      disambiguator = createDefaultDisambiguator();
+      synchronized (DISAMBIGUATOR_LOCK) {
+        if (disambiguator == null) {
+          disambiguator = createDefaultDisambiguator();
+        }
+      }
     }
 
     return disambiguator;
@@ -449,9 +456,13 @@ public abstract class Language {
   /**
    * Get this language's sentence tokenizer implementation.
    */
-  public synchronized SentenceTokenizer getSentenceTokenizer() {
+  public SentenceTokenizer getSentenceTokenizer() {
     if (sentenceTokenizer == null) {
-      sentenceTokenizer = createDefaultSentenceTokenizer();
+      synchronized (SENTENCE_TOKENIZER_LOCK) {
+        if (sentenceTokenizer == null) {
+          sentenceTokenizer = createDefaultSentenceTokenizer();
+        }
+      }
     }
     return sentenceTokenizer;
   }
@@ -668,42 +679,50 @@ public abstract class Language {
    * @since 2.7
    */
   @SuppressWarnings("resource")
-  protected synchronized List<AbstractPatternRule> getPatternRules() throws IOException {
+  protected List<AbstractPatternRule> getPatternRules() throws IOException {
     // use lazy loading to speed up server use case and start of stand-alone LT, where all the languages get initialized:
     if (patternRules == null) {
-      List<AbstractPatternRule> rules = new ArrayList<>();
-      PatternRuleLoader ruleLoader = new PatternRuleLoader();
-      for (String fileName : getRuleFileNames()) {
-        InputStream is = null;
-        try {
-          is = JLanguageTool.getDataBroker().getAsStream(fileName);
-          boolean ignore = false;
-          if (is == null) {                     // files loaded via the dialog
-            try {
-              is = new FileInputStream(fileName);
-            } catch (FileNotFoundException e) {
-              if (fileName.contains("-test-")) {
-                // ignore, used for testing
-                ignore = true;
-              } else {
-                throw e;
-              }
-            }
-          }
-          if (!ignore) {
-            rules.addAll(ruleLoader.getRules(is, fileName, this));
-            patternRules = Collections.unmodifiableList(rules);
-          }
-        } finally {
-          if (is != null) {
-            is.close();
-          }
+      synchronized (PATTERN_RULE_LOCK) {
+        if (patternRules == null) {
+          initializePatternRules();
         }
       }
     }
     return patternRules;
   }
-  
+
+  private void initializePatternRules() throws IOException {
+    List<AbstractPatternRule> rules = new ArrayList<>();
+    PatternRuleLoader ruleLoader = new PatternRuleLoader();
+    for (String fileName : getRuleFileNames()) {
+      InputStream is = null;
+      try {
+        is = JLanguageTool.getDataBroker().getAsStream(fileName);
+        boolean ignore = false;
+        if (is == null) {                     // files loaded via the dialog
+          try {
+            is = new FileInputStream(fileName);
+          } catch (FileNotFoundException e) {
+            if (fileName.contains("-test-")) {
+              // ignore, used for testing
+              ignore = true;
+            } else {
+              throw e;
+            }
+          }
+        }
+        if (!ignore) {
+          rules.addAll(ruleLoader.getRules(is, fileName, this));
+          patternRules = Collections.unmodifiableList(rules);
+        }
+      } finally {
+        if (is != null) {
+          is.close();
+        }
+      }
+    }
+  }
+
   @Override
   public final String toString() {
     return getName();

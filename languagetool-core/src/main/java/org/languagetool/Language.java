@@ -90,10 +90,10 @@ public abstract class Language {
   private static final Pattern TYPOGRAPHY_PATTERN_4 = compile("([ \\(])\"");
   private static final Pattern TYPOGRAPHY_PATTERN_5 = compile("\"([\\u202f\\u00a0 !\\?,\\.;:\\)])");
 
-  private static final Object PATTERN_RULE_LOCK = new Object();
-  private static final Object DISAMBIGUATOR_LOCK = new Object();
-  private static final Object SENTENCE_TOKENIZER_LOCK = new Object();
-  private static final Object WORD_TOKENIZER_LOCK = new Object();
+  private final Object patternRuleLock = new Object();
+  private final Object disambiguatorLock = new Object();
+  private final Object sentenceTokenizerLock = new Object();
+  private final Object wordTokenizerLock = new Object();
 
   private final UnifierConfiguration unifierConfig = new UnifierConfiguration();
   private final UnifierConfiguration disambiguationUnifierConfig = new UnifierConfiguration();
@@ -401,7 +401,7 @@ public abstract class Language {
    */
   public Disambiguator getDisambiguator() {
     if (disambiguator == null) {
-      synchronized (DISAMBIGUATOR_LOCK) {
+      synchronized (disambiguatorLock) {
         if (disambiguator == null) {
           disambiguator = createDefaultDisambiguator();
         }
@@ -459,7 +459,7 @@ public abstract class Language {
    */
   public SentenceTokenizer getSentenceTokenizer() {
     if (sentenceTokenizer == null) {
-      synchronized (SENTENCE_TOKENIZER_LOCK) {
+      synchronized (sentenceTokenizerLock) {
         if (sentenceTokenizer == null) {
           sentenceTokenizer = createDefaultSentenceTokenizer();
         }
@@ -488,7 +488,7 @@ public abstract class Language {
    */
   public synchronized Tokenizer getWordTokenizer() {
     if (wordTokenizer == null) {
-      synchronized (WORD_TOKENIZER_LOCK) {
+      synchronized (wordTokenizerLock) {
         if (wordTokenizer == null) {
           wordTokenizer = createDefaultWordTokenizer();
         }
@@ -687,7 +687,7 @@ public abstract class Language {
   protected List<AbstractPatternRule> getPatternRules() throws IOException {
     // use lazy loading to speed up server use case and start of stand-alone LT, where all the languages get initialized:
     if (patternRules == null) {
-      synchronized (PATTERN_RULE_LOCK) {
+      synchronized (patternRuleLock) {
         if (patternRules == null) {
           initializePatternRules();
         }

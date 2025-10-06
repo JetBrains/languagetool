@@ -486,7 +486,7 @@ public abstract class Language {
   /**
    * Get this language's word tokenizer implementation.
    */
-  public synchronized Tokenizer getWordTokenizer() {
+  public Tokenizer getWordTokenizer() {
     if (wordTokenizer == null) {
       synchronized (wordTokenizerLock) {
         if (wordTokenizer == null) {
@@ -689,14 +689,14 @@ public abstract class Language {
     if (patternRules == null) {
       synchronized (patternRuleLock) {
         if (patternRules == null) {
-          initializePatternRules();
+          patternRules = initializePatternRules();
         }
       }
     }
     return patternRules;
   }
 
-  private void initializePatternRules() throws IOException {
+  private List<AbstractPatternRule> initializePatternRules() throws IOException {
     List<AbstractPatternRule> rules = new ArrayList<>();
     PatternRuleLoader ruleLoader = new PatternRuleLoader();
     for (String fileName : getRuleFileNames()) {
@@ -718,7 +718,6 @@ public abstract class Language {
         }
         if (!ignore) {
           rules.addAll(ruleLoader.getRules(is, fileName, this));
-          patternRules = Collections.unmodifiableList(rules);
         }
       } finally {
         if (is != null) {
@@ -726,6 +725,7 @@ public abstract class Language {
         }
       }
     }
+    return Collections.unmodifiableList(rules);
   }
 
   @Override

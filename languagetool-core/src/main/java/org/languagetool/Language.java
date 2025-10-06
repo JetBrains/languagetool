@@ -93,6 +93,7 @@ public abstract class Language {
   private static final Object PATTERN_RULE_LOCK = new Object();
   private static final Object DISAMBIGUATOR_LOCK = new Object();
   private static final Object SENTENCE_TOKENIZER_LOCK = new Object();
+  private static final Object WORD_TOKENIZER_LOCK = new Object();
 
   private final UnifierConfiguration unifierConfig = new UnifierConfiguration();
   private final UnifierConfiguration disambiguationUnifierConfig = new UnifierConfiguration();
@@ -103,7 +104,7 @@ public abstract class Language {
   private volatile Disambiguator disambiguator;
   private Tagger tagger;
   private volatile SentenceTokenizer sentenceTokenizer;
-  private Tokenizer wordTokenizer;
+  private volatile Tokenizer wordTokenizer;
   private Chunker chunker;
   private Chunker postDisambiguationChunker;
   private Synthesizer synthesizer;
@@ -487,7 +488,11 @@ public abstract class Language {
    */
   public synchronized Tokenizer getWordTokenizer() {
     if (wordTokenizer == null) {
-      wordTokenizer = createDefaultWordTokenizer();
+      synchronized (WORD_TOKENIZER_LOCK) {
+        if (wordTokenizer == null) {
+          wordTokenizer = createDefaultWordTokenizer();
+        }
+      }
     }
     return wordTokenizer;
   }

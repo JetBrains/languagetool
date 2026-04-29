@@ -130,7 +130,7 @@ USA
 
     </category>
     <category id="BRE_STYLE_OXFORD_SPELLING" name="British English, Oxford spelling (~iz~ not ~is~)" type="style">
-        <rulegroup id="OXFORD_SPELLING_GRAM" name="Oxford spelling of 'gram' (not 'gramme')">
+        <rulegroup id="OXFORD_SPELLING_GRAM" name="Oxford spelling of 'gram' (not 'gramme')" default="off">
             <rule><!-- nouns. Nouns and adjectives have separate rules to prevent incorrect suggestions for incorrect adjectives such as '5-grammes'. -->
                 <pattern>
                     <token regexp="yes">(yotta|zetta|exa|peta|tera|giga|mega|kilo|hecto|deca|deci|centi|milli|micro|nano|pico|femto|atto|zepto|yocto)?grammes?<exception postag="NNP"/></token>
@@ -169,7 +169,7 @@ USA
         MFU removed 2019-05-02. Refer to https://forum.languagetool.org/t/remove-oxford-spelling-ize/3805
         -->
 
-        <rulegroup id="OXFORD_SPELLING_Z_NOT_S" name="Oxford spelling is/iz">
+        <rulegroup id="OXFORD_SPELLING_Z_NOT_S" name="Oxford spelling is/iz" default="off">
         <!-- For general notes and design decisions, refer to OXFORD_SPELLING_ISE_VERBS. Rules developed by Mike Unwalla. -->
         <!-- Not uppercase: https://github.com/languagetool-org/languagetool/issues/1292 -->
         <!-- No suggestions: https://github.com/languagetool-org/languagetool/issues/2764 -->

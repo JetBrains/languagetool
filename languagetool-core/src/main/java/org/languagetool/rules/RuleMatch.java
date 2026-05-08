@@ -460,7 +460,7 @@ public class RuleMatch implements Comparable<RuleMatch> {
   }
 
   /**
-   * Returns the supplier of suggested replacements. The primary use case is to map existing suggestions lazily.
+   * Returns the supplier of suggested replacements. The primary use case is to transform existing suggestions lazily.
    * <p>
    * Consider using {@link #getSuggestedReplacementObjects()} or {@link #getSuggestedReplacements()} instead.
    */

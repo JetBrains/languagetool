@@ -53,10 +53,11 @@ public final class Hunspell {
 
       @Override
       public HunspellDictionary createFromStreams(String language, InputStream dictionaryStream, InputStream affixStream) throws IOException {
-        // Create temp files from streams - must clean up when dictionary is closed
+        // Resources are in JARs or other non-file sources - must create temp files
+        // These temp files live for the JVM lifetime (deleteOnClose=false)
         var tempFiles = createTempFilesFromStreams(language, dictionaryStream, affixStream);
         log.trace("Created temp files for language {}: {} and {}", language, tempFiles.dictionary, tempFiles.affix);
-        return new DumontsHunspellDictionary(tempFiles.dictionary, tempFiles.affix, true);
+        return new DumontsHunspellDictionary(tempFiles.dictionary, tempFiles.affix, false);
       }
     };
   }
@@ -158,8 +159,6 @@ public final class Hunspell {
       }
     }
 
-    // Resources are in JARs or other non-file sources - must create temp files
-    // These temp files live for the JVM lifetime (deleteOnClose=false)
     try (var dictionaryStream = broker.getFromResourceDirAsStream(dicPath);
          var affixStream = broker.getFromResourceDirAsStream(affPath)) {
       if (dictionaryStream == null || affixStream == null) {
@@ -167,7 +166,7 @@ public final class Hunspell {
       }
 
       var tempFiles = createTempFilesFromStreams(language, dictionaryStream, affixStream);
-      var dict = new DumontsHunspellDictionary(tempFiles.dictionary, tempFiles.affix, false);
+      var dict = hunspellDictionaryStreamFactory.createFromStreams(language, dictionaryStream, affixStream);
 
       // Cache by resource path for future lookups (fixes #11380)
       resourceCache.put(key, dict);

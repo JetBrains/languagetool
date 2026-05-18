@@ -165,13 +165,11 @@ public final class Hunspell {
         throw new RuntimeException("Could not find the dictionary for language \"" + language + "\" in the classpath");
       }
 
-      var tempFiles = createTempFilesFromStreams(language, dictionaryStream, affixStream);
       var dict = hunspellDictionaryStreamFactory.createFromStreams(language, dictionaryStream, affixStream);
 
       // Cache by resource path for future lookups (fixes #11380)
       resourceCache.put(key, dict);
-      log.trace("Created and cached dictionary from JAR resource for language {}: {} and {}",
-                language, tempFiles.dictionary, tempFiles.affix);
+      log.trace("Created and cached dictionary from JAR resource for language {}: {} and {}", language, dicPath, affPath);
 
       return dict;
     } catch (IOException e) {
